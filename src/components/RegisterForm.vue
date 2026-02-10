@@ -25,7 +25,7 @@ const register = async () => {
   }
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/register', {
+    const response = await axios.post('http://pzi122026.studenti.sum.ba/backend/api/register', {
       name: name.value,
       email: email.value,
       role: role.value

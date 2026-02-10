@@ -25,7 +25,7 @@ const login = async () => {
   }
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/login', {
+    const response = await axios.post('http://pzi122026.studenti.sum.ba/backend/api/login', {
       name: name.value,
       email: email.value,
       role: role.value
