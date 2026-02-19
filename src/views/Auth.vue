@@ -76,14 +76,14 @@ const activeTab = ref('register') // default otvoreno registracija
 
 const handleLoginSuccess = (user) => {
   localStorage.setItem('currentUser', JSON.stringify(user))
-
+  sessionStorage.setItem('justLoggedIn', 'true')
     router.push('/ads')
   }
 
 
 const handleRegisterSuccess = (user) => {
   localStorage.setItem('currentUser', JSON.stringify(user))
-
+  sessionStorage.setItem('justLoggedIn', 'true')
     router.push('/ads')
   }
 

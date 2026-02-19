@@ -2,7 +2,10 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: 'http://pzi122026.studenti.sum.ba/backend/api',
-  headers: { Accept: 'application/json' }
+  headers: { 
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'  // dodaj ovo
+  }
 })
 
 api.interceptors.request.use(config => {

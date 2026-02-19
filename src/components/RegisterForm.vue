@@ -1,39 +1,43 @@
 <template>
   <v-card-text>
-    <v-text-field v-model="name" label="Name" />
+    <v-text-field v-model="name" label="Ime" />
     <v-text-field v-model="email" label="Email" />
-    <v-select v-model="role" :items="['user','admin']" label="Role" />
-    <v-btn color="primary" block @click="register">Register</v-btn>
+    <v-text-field v-model="password" label="Lozinka" type="password" />
+    <v-text-field v-model="passwordConfirmation" label="Potvrdi lozinku" type="password" />
+    <v-select v-model="role" :items="['user','admin']" label="Rola" />
+    <v-btn color="primary" block @click="register">Registracija</v-btn>
   </v-card-text>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { defineEmits } from 'vue'
-import axios from 'axios'
+import { useAuthStore } from '../stores/auth'
 
 const emits = defineEmits(['register-success'])
 
+const authStore = useAuthStore()
+
 const name = ref('')
 const email = ref('')
+const password = ref('')
+const passwordConfirmation = ref('')
 const role = ref('user')
 
 const register = async () => {
-  if (!name.value || !email.value) {
+  if (!name.value || !email.value || !password.value) {
     alert('Popuni sva polja!')
     return
   }
 
-  try {
-    const response = await axios.post('http://pzi122026.studenti.sum.ba/backend/api/register', {
-      name: name.value,
-      email: email.value,
-      role: role.value
-    })
+  if (password.value !== passwordConfirmation.value) {
+    alert('Lozinke se ne podudaraju!')
+    return
+  }
 
-    emits('register-success', response.data.user)
-  } catch (error) {
-    alert(error.response?.data?.message || 'Greška pri registraciji')
+  const success = await authStore.register(name.value, email.value, password.value, role.value)
+  
+  if (success) {
+    emits('register-success', authStore.user)
   }
 }
 </script>

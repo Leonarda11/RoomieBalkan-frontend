@@ -1,47 +1,32 @@
 <template>
   <v-card-text>
-    <v-text-field v-model="name" label="Name" />
     <v-text-field v-model="email" label="Email" />
-    <v-select v-model="role" :items="['user','admin']" label="Role" />
-    <v-btn color="primary" block @click="login">Login</v-btn>
+    <v-text-field v-model="password" label="Lozinka" type="password" />
+    <v-btn color="primary" block @click="login">Prijava</v-btn>
   </v-card-text>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { defineEmits } from 'vue'
-import axios from 'axios'
+import { useAuthStore } from '../stores/auth'
 
 const emits = defineEmits(['login-success'])
 
-const name = ref('')
+const authStore = useAuthStore()
+
 const email = ref('')
-const role = ref('user')
+const password = ref('')
 
 const login = async () => {
-  if (!name.value || !email.value) {
+  if (!email.value || !password.value) {
     alert('Popuni sva polja!')
     return
   }
 
-  try {
-    const response = await axios.post('http://pzi122026.studenti.sum.ba/backend/api/login', {
-      name: name.value,
-      email: email.value,
-      role: role.value
-    })
+  const success = await authStore.login(email.value, password.value)
 
-    const user = response.data.user
-
-
-    if (user.role !== role.value) {
-      alert('Neispravna rola za ovog korisnika!')
-      return
-    }
-
-    emits('login-success', user)
-  } catch (error) {
-    alert(error.response?.data?.message || 'Greška pri prijavi')
+  if (success) {
+    emits('login-success', authStore.user)
   }
 }
 </script>
